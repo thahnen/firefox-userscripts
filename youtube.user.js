@@ -1,14 +1,14 @@
 // ==UserScript==
-// @name		YouTube - Unablenkend
-// @version		1.0.0
-// @description	Entfernt alles, was mich neben meinen normalen YT-Abos (gefiltert?) ablenken könnte
+// @name        YouTube - Unablenkend
+// @version     1.0.0
+// @description Entfernt alles, was mich neben meinen normalen YT-Abos (gefiltert?) ablenken könnte
 // @license     MIT
-// @author		Tobias Hahnen
-// @namespace	https://github.com/thahnen
-// @include		http://*youtube.com*
-// @include		https://*youtube.com*
-// @run-at		document-begin
-// @icon		https://s.ytimg.com/yts/img/favicon_144-vfliLAfaB.png
+// @author      Tobias Hahnen
+// @namespace   https://github.com/thahnen
+// @include     http://*youtube.com*
+// @include     https://*youtube.com*
+// @run-at      document-begin
+// @icon        https://s.ytimg.com/yts/img/favicon_144-vfliLAfaB.png
 // @updateURL   https://raw.githubusercontent.com/thahnen/firefox-userscripts/master/youtube.user.js
 // @downloadURL https://raw.githubusercontent.com/thahnen/firefox-userscripts/master/youtube.user.js
 // ==/UserScript==
@@ -57,8 +57,33 @@
     // => "Video teilen" Button brauch ich auch nicht
     // 5. '#button'
     // => Das Einstellungs-Rädchen kann auch weg!
+    //
+    // Vlt. sortieren, nach welchen die wiederkommen könnten und nur die alle paar Sekunden überprüfen?
 
-    // Hier fehlt noch so einiges, aber das ist ok :>
+    let milliseconds = 5000;
 
-    // Your code here...
+    let elems = [
+        //'ytd-guide-section-renderer.ytd-guide-renderer.style-scope:nth-of-type(3)', // jeweils nur einmal wegen nth!
+        //'ytd-guide-section-renderer.ytd-guide-renderer.style-scope:nth-of-type(4)', // jeweils nur einmal wegen nth!
+        '#vat-notice',
+        '#sections',
+        '#secondary',
+        '#sponsor-button',
+        'ytd-button-renderer.force-icon-button.size-default.style-default.ytd-menu-renderer.style-scope:nth-of-type(1) > .ytd-button-renderer.style-scope.yt-simple-endpoint'
+    ];
+
+    function checkGarbage() {
+        elems.forEach((x) => {
+            let elem = document.querySelector(x);
+            if (elem != null) {
+                elem.remove();
+            }
+        });
+    }
+
+    // direkt einmal am aufrufen
+    checkGarbage();
+
+    // Interval setzen, damit es alle paar Sekunden neu überprüft wird.
+    setInterval(checkGarbage, milliseconds);
 })();

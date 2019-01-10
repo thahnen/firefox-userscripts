@@ -1,14 +1,14 @@
 // ==UserScript==
-// @name		TheRepublic - Unnervig
-// @version		1.0.0
-// @description	Löscht all die Werbung, Social-Media-Scheisse etc, die uBlock Origin nicht wegbannt, nachträglich!
+// @name        TheRepublic - Unnervig
+// @version     1.0.0
+// @description Löscht all die Werbung, Social-Media-Scheisse etc, die uBlock Origin nicht wegbannt, nachträglich!
 // @license     MIT
-// @author		Tobias Hahnen
-// @namespace	https://github.com/thahnen
-// @include		http://*therepublic.com*
-// @include		https://*therepublic.com*
-// @run-at		document-begin
-// @icon		http://www.therepublic.com/wp-content/uploads/sites/6/2016/03/TheRepublic-Icon-1024x1024-300x300.jpg
+// @author      Tobias Hahnen
+// @namespace   https://github.com/thahnen
+// @include     http://*therepublic.com*
+// @include     https://*therepublic.com*
+// @run-at      document-begin
+// @icon        http://www.therepublic.com/wp-content/uploads/sites/6/2016/03/TheRepublic-Icon-1024x1024-300x300.jpg
 // @updateURL   https://raw.githubusercontent.com/thahnen/firefox-userscripts/master/therepublic.user.js
 // @downloadURL https://raw.githubusercontent.com/thahnen/firefox-userscripts/master/therepublic.user.js
 // ==/UserScript==
@@ -52,6 +52,10 @@
     // => Social-Media Buttons unter dem Artikel
     // 2. '.td-ss-main-sidebar'
     // => Social-Media Seitenleiste neben dem Artikel
+    //
+    // Vlt. sortieren, nach welchen die wiederkommen könnten und nur die alle paar Sekunden überprüfen?
+
+    let milliseconds = 5000;
 
     let elems = [
         '.td-ss-row.td-pb-row.wpb_row.vc_row > .td-pb-span4.vc_column_container.wpb_column > .wpb_wrapper',
@@ -64,10 +68,18 @@
         '.td-ss-main-sidebar'
     ];
 
-    elems.forEach((x) => {
-        let elem = document.querySelector(x);
-        if (elem != null) {
-            elem.remove();
-        }
-    });
+    function checkGarbage() {
+        elems.forEach((x) => {
+            let elem = document.querySelector(x);
+            if (elem != null) {
+                elem.remove();
+            }
+        });
+    }
+
+    // direkt einmal am aufrufen
+    checkGarbage();
+
+    // Interval setzen, damit es alle paar Sekunden neu überprüft wird.
+    setInterval(checkGarbage, milliseconds);
 })();
